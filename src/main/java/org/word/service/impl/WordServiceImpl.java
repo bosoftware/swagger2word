@@ -318,6 +318,8 @@ public class WordServiceImpl implements WordService {
 			while (modelNameIt.hasNext()) {
 				modeName = modelNameIt.next();
 				Map<String, Object> modeProperties = (Map<String, Object>) definitions.get(modeName).get("properties");
+				List<String> requiredNames = (List<String>) definitions.get(modeName).get("required");
+
 				Iterator<Entry<String, Object>> pIt = modeProperties.entrySet().iterator();
 
 				List<ResponseModelAttr> attrList = new ArrayList<>();
@@ -332,6 +334,9 @@ public class WordServiceImpl implements WordService {
 					modeAttr.setType((String) attrInfoMap.get("type"));
 					if (attrInfoMap.get("format") != null) {
 						modeAttr.setType(modeAttr.getType() + "(" + (String) attrInfoMap.get("format") + ")");
+					}
+					if (requiredNames != null && requiredNames.contains(modeAttr.getValue())) {
+						modeAttr.setRequire(true);
 					}
 					attrList.add(modeAttr);
 				}
